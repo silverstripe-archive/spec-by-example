@@ -14,16 +14,9 @@ abstract class WebDriverSteps extends CucumberSteps {
 
 		// This needs to be in a global to prevent re-instantiation
 		if(!$_WEBDRIVER_SESSION) {
-			$wd = new WebDriver();
-			$_WEBDRIVER_SESSION = $wd->session($this->site->browser());
-			register_shutdown_function('end_webdriver_session');
+			start_webdriver_session();
+			global $_WEBDRIVER_SESSION;
 		}
 		$this->session = $_WEBDRIVER_SESSION;
 	}
-}
-
-function end_webdriver_session($session) {
-	global $_WEBDRIVER_SESSION;
-	/*$session->close();
-	if($session != $_WEBDRIVER_SESSION)*/ $_WEBDRIVER_SESSION->close();
 }

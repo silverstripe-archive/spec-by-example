@@ -47,4 +47,19 @@ class SiteInformation {
 	}
 }
 
-?>
+function start_webdriver_session() {
+	echo "STARTED\n";
+	global $_WEBDRIVER_SESSION;
+	global $_CUCUMBER_SITEINFO;
+	if(!$_WEBDRIVER_SESSION) {
+		$wd = new WebDriver();
+		$_WEBDRIVER_SESSION = $wd->session($_CUCUMBER_SITEINFO->browser());
+		register_shutdown_function('end_webdriver_session');
+	}
+}
+
+function end_webdriver_session() {
+	echo "HELLO!\n";
+	global $_WEBDRIVER_SESSION;
+	$_WEBDRIVER_SESSION->close();
+}
