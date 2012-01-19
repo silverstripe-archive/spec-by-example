@@ -13,7 +13,7 @@ Feature: Edit a page
   Scenario: I can open a page for editing by navigating the site
     Given I am logged into the CMS
     And I visit the "About Us" page
-    When I click the "Edit page" in the CMS menu
+    When I click "Edit page" in the CMS menu
     Then I see a form for editing the "About Us" page
     
   Scenario: I can edit title and content and see the changes on draft
