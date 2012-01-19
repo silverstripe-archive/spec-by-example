@@ -34,8 +34,10 @@ As well as this package, you will need to download/install:
  * php5's sockets extension
  * Selenium's standalone server
 
+These commands will do this for you:
+
 	# This has an unreleased fix in it so I rebundled the gem
-	sudo gem install cuke4php-0.9.10b.gem
+	sudo gem install cuke4php-0.9.10c.gem
 	# If you use MacPorts, do this. If you don't use MacPorts, figure out another way of doing this
 	sudo port install php5-sockets
 	wget http://selenium.googlecode.com/files/selenium-server-standalone-2.17.0.jar
@@ -73,8 +75,8 @@ The following environment variables are supported:
 
 ## Things we used.
 
- * cuke4php is here: https://github.com/olbrich/cuke4php 
- * The php-webdriver library was built by Facebook: https://github.com/facebook/php-webdriver
- * The selenium standalone server comes from here: http://code.google.com/p/selenium/downloads/list
+ * [cuke4php](https://github.com/olbrich/cuke4php)
+ * [Selenium's standalone server](http://code.google.com/p/selenium/downloads/list)
+ * [Facebook's php-webdriver library](https://github.com/facebook/php-webdriver)
 
 In addition, cuke4php relies on our old friend, PHPUnit.
