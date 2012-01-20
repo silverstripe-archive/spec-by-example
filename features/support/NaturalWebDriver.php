@@ -160,6 +160,15 @@ class NaturalWebDriver {
 		
 		return true;
 	}
+	
+	function ajaxClickHandler_before() {
+		$support = new NaturalWebDriver_Support($this->session);
+		$support->ajaxClickHandler_before();
+	}
+	function ajaxClickHandler_after() {
+		$support = new NaturalWebDriver_Support($this->session);
+		$support->ajaxClickHandler_after();
+	}
 }
 
 class NaturalWebDriver_Element {
@@ -234,48 +243,55 @@ class NaturalWebDriver_Support {
 	
 	// TODO: This needs to be stress tested.
 	function ajaxClickHandler_before() {
+		//echo "before\n";
+		
 			$javascript = <<<JS
-      window.__ajaxStatus = function() { return 'no ajax'; };
+				window.__ajaxStatus = function() { return 'no ajax'; };
 
-      if(typeof window.__ajaxPatch == 'undefined') {
-        window.__ajaxPatch = 1;
+				/* Monkey-patch Prototype */
+				if(typeof window.Ajax!='undefined' && typeof window.Ajax.Request!='undefined') {
+					if(typeof window.Ajax.__hasNaturalWebDriver == 'undefined') {
+						window.Ajax.__hasNaturalWebDriver = true;
+						window.Ajax.Request.prototype.initialize = function(url, options) {
+							this.transport = window.Ajax.getTransport();
 
-        var patchedList = "";
+							var __activeTransport = this.transport;
+							window.__ajaxStatus = function() {
+								return (__activeTransport.readyState == 4) ? 'success' : 'waiting';
+							};
 
-        /* Monkey-patch Prototype */
-        if(typeof window.Ajax!='undefined' && typeof window.Ajax.Request!='undefined') {
-          window.Ajax.Request.prototype.initialize = function(url, options) {
-            this.transport = window.Ajax.getTransport();
+							this.setOptions(options);
+							this.request(url);
+						};
+					}
+				}
 
-            var __activeTransport = this.transport;
-            window.__ajaxStatus = function() {
-              return (__activeTransport.readyState == 4) ? 'success' : 'waiting';
-            };
+				/* Monkey-patch jQuery */
+				if(typeof window.jQuery!='undefined') {
+					if(typeof window.jQuery.__hasNaturalWebDriver == 'undefined') {
+						window.jQuery.__hasNaturalWebDriver = true;
+						var _orig_ajax = window.jQuery.ajax;
+						
+						window.jQuery.ajax = function(a,b) {
+							window.__ajaxStatus = function() { return 'waiting'; };
 
-            this.setOptions(options);
-            this.request(url);
-          };
-          patchedList += " prototype";
-        }
+							// Monkey-patch complete handler
+							if ( typeof a === "object" ) var options = a;
+							else var options = b;
 
-        /* Monkey-patch jQuery */
-        if(typeof window.jQuery!='undefined') {
-          var _orig_ajax = window.jQuery.ajax;
+							if(typeof options.complete == "undefined") _orig_complete = function() {}
+							else _orig_complete = options.complete;	
+							
+							options.complete = function(jqXHR, textStatus) {
+								_orig_complete(jqXHR, textStatus);
+								window.__ajaxStatus = function() { return 'success'; };
+							}
 
-          window.jQuery(window).ajaxStop(function() {
-            window.__ajaxStatus = function() { return 'success'; };
-          });
-
-          window.jQuery.ajax = function(s) {
-            window.__ajaxStatus = function() { return 'waiting'; };
-            _orig_ajax(s);
-          };
-          patchedList += " jquery";
-        }
-        return "patched" + patchedList;
-      } else {
-        return "already patched: " + window.__ajaxPatch;
-      }
+							if(typeof url == "undefined") _orig_ajax(options);
+							else _orig_ajax(a,b);
+						}
+					}
+				}
 JS;
 		$this->session->execute(array(
 			'script' => $javascript, 
@@ -290,7 +306,7 @@ JS;
 				"script" => "return window.__ajaxStatus ? window.__ajaxStatus() : 'no ajax';", 
 				"args" => array(),
 			));
-			//echo $response . "\n";
+			//echo "after: . " . $response . "\n";
 			if($response == 'waiting') usleep(100*1000);
 		}
 	}
