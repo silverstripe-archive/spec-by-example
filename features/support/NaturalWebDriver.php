@@ -49,13 +49,20 @@ class NaturalWebDriver {
 	 */
 	function field($label) {
 		try {
-			$label = $this->el->element("xpath", "//label[text()='$label']");
-		} catch(NoSuchElementWebDriverError $e) { $label = null; }
-		if(!$label) {
+			$labelEl = null;
+			$potentialLabels = $this->el->elements("xpath", "//label[text()='$label']");
+			foreach($potentialLabels as $potentialLabel) {
+				if($potentialLabel->displayed()) {
+					$labelEl = $potentialLabel;
+					break;
+				}
+			}
+		} catch(NoSuchElementWebDriverError $e) {}
+		if(!$labelEl) {
 			throw new LogicException("Can't find a field label with text '$label'");
 		}
 		
-		$id = $label->attribute('for');
+		$id = $labelEl->attribute('for');
 		try {
 			$el = $this->el->element("id", $id);
 		} catch(NoSuchElementWebDriverError $e) { $el = null; }
