@@ -5,6 +5,14 @@
  * turn your specifications into unintelligible scripts.
  */
 class BasicSteps extends WebDriverSteps {
+
+	/**
+	 * Clear the session each time
+	 */
+	public function beforeAll() {
+		$this->session->deleteAllCookies();
+	}
+	
 	
 	/**
 	 * Given /^(if )?I visit ([^ ]+)/
