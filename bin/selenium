@@ -1,0 +1,2 @@
+dir=`dirname $0`
+java -jar $dir/../selenium-server-standalone-2.17.0.jar &> /dev/null &
