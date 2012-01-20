@@ -45,8 +45,9 @@ class PageUISteps extends WebDriverSteps {
 		// Check each link in the tree, looking at it's span.item text, so as to ignore the lozenges
 		foreach($this->natural->wd()->elements('css selector', '#cms-content-treeview div.cms-tree a span.item') as $candidate) {
 			if($candidate->text() == $pageName) {
+				$this->natural->ajaxClickHandler_before();
 				$candidate->click();
-				sleep(1);
+				$this->natural->ajaxClickHandler_after();
 				return;
 			}
 		}
