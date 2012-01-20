@@ -6,7 +6,7 @@ global $_WEBDRIVER_SESSION, $_CUCUMBER_SITEINFO;
  * Use this to define steps that require a webdriver session.
  */
 abstract class WebDriverSteps extends CucumberSteps {
-  protected $session, $site;
+  protected $session, $natural, $site;
 
 	public function __construct() {
 		global $_WEBDRIVER_SESSION, $_CUCUMBER_SITEINFO;
@@ -18,5 +18,14 @@ abstract class WebDriverSteps extends CucumberSteps {
 			global $_WEBDRIVER_SESSION;
 		}
 		$this->session = $_WEBDRIVER_SESSION;
+		$this->natural = new NaturalWebDriver($this->session, $this->site);
+	}
+	
+	/**
+	 * Split a value into keypresses
+	 */
+	public function split_keys($value) {
+		$payload = array("value" => preg_split("//u", $value, -1, PREG_SPLIT_NO_EMPTY));
+		return $payload;
 	}
 }

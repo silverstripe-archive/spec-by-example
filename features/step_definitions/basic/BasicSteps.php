@@ -10,9 +10,7 @@ class BasicSteps extends WebDriverSteps {
 	 * Given /^I visit (http[^ ]+)/
 	 **/
 	public function stepIVisitURL($url) {
-		// Absolutize URL if necessary
-		if(!preg_match('/^[a-z]+:/', $url)) $url = $this->site->baseURL() . $url;
-		$this->session->open($url);
+		$this->natural->visit($url);
 	}
 
 	/**
