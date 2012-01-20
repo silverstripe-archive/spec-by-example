@@ -9,18 +9,35 @@ class CMSSteps extends WebDriverSteps {
 	 * Given /^I am logged into the CMS$/
 	 **/
 	public function stepIAmLoggedIntoTheCMS() {
-		$this->session->open($this->site->baseURL() . "Security/login");
-		$this->session->element("id", "MemberLoginForm_LoginForm_Email")->value(array('value' => array('sam@silverstripe.com') ));
-		$this->session->element("id", "MemberLoginForm_LoginForm_Password")->value(array('value' => array('password') ));
-		$this->session->element("id", "MemberLoginForm_LoginForm_action_dologin")->click();
-		$this->session->open($this->site->baseURL() . "admin");
+		$this->stepILogInWith('sam@silverstripe.com', 'password');
+		$this->natural->visit("admin");
 	}
+
+	/**
+	* When /^I log in with "([^"]*)" and "([^"]*)"$/
+	**/
+	public function stepILogInWith($email,$password) {
+		$this->session->open($this->site->baseURL() . "Security/login");
+		
+		$this->natural->visit("Security/login");
+		$this->natural->field("Email")->setTo($email);
+		$this->natural->field("Password")->setTo($password);
+		$this->natural->button("Log in")->click();
+	}
+
+	/**
+	* Then /^I will see a bad log\-in message$/
+	**/
+	public function stepIWillSeeABadLogInMessage() {
+		$this->assertTrue($this->natural->textIsVisible("That doesn't seem to be the right e-mail address or password"));
+	}
+
 
 	/**
 	 * When /^I click "([^"]*)" in the CMS menu$/
 	 **/
 	public function stepIClickParameterInTheCMSMenu($arg1) {
-		self::markPending();
+		$this->natural->panel('#cms-menu')->link($arg1)->click();
 	}
 
 	/**
