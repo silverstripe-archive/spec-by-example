@@ -38,13 +38,7 @@ class CMSSteps extends WebDriverSteps {
 	 **/
 	public function stepIClickParameterInTheCMSMenu($arg1) {
 		$this->natural->panel('#cms-menu')->link($arg1)->click();
-	}
-
-	/**
-	 * When /^I click "([^"]*)" in the tree$/
-	 **/
-	public function stepIClickParameterInTheTree($arg1) {
-		self::markPending();
+		sleep(1);
 	}
 
 }

@@ -196,6 +196,21 @@ class NaturalWebDriver_Element {
 	function setTo($value) {
 		$this->el->clear();
 		$this->el->value($this->split_keys($value));
+	
+	/**
+	 * Returns the current value
+	 */
+	function text() {
+		$text = trim($this->el->text());
+		if($text == "") $text = $this->el->attribute('value');
+		return $text;
+	}
+	
+	/**
+	 * Returns the value of the given attribute
+	 */
+	function attribute($attrName) {
+		return $this->el->attribute($attrName);
 	}
 
 

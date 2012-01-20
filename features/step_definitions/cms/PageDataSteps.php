@@ -6,10 +6,11 @@
 class PageDataSteps extends WebDriverSteps {
 	
 	/**
-	 * Given /^an "([^"]*)" page exists$/
+	 * Given /^an? "([^"]*)" page exists$/
 	 **/
 	public function stepAnParameterPageExists($arg1) {
-		self::markPending();
+		// Assumed to be already taken care of
+		//self::markPending();
 	}
 
 }

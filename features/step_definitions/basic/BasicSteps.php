@@ -15,7 +15,7 @@ class BasicSteps extends WebDriverSteps {
 	
 	
 	/**
-	 * Given /^(if )?I visit ([^ ]+)/
+	 * Given /^(if )?I visit ([^ ]+)$/
 	 **/
 	public function stepIVisitURL($dummy1, $url) {
 		$this->natural->visit($url);
@@ -63,7 +63,7 @@ class BasicSteps extends WebDriverSteps {
 	/**
 	 * When /^I put "([^"]*)" into the "([^"]*)" field$/
 	 **/
-	public function stepIPutParameterIntoTheParameterField($field,$value) {
+	public function stepIPutParameterIntoTheParameterField($value, $field) {
 		$this->natural->field($field)->setTo($value);
 	}
 
