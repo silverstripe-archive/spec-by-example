@@ -196,6 +196,8 @@ class NaturalWebDriver_Element {
 		$support = new NaturalWebDriver_Support($this->session);
 		$support->ajaxClickHandler_before();
 		$this->el->click();
+		usleep(500*1000); // the javascript currently has race conditions :-(
+
 		$support->ajaxClickHandler_after();
 	}
 
