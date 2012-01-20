@@ -203,10 +203,23 @@ class NaturalWebDriver_Element {
 
 	/**
 	 * Set a field to a value, ensuring that it is empty first.
+	 * Auto-detects TinyMCE fields.
 	 */
 	function setTo($value) {
-		$this->el->clear();
-		$this->el->value($this->split_keys($value));
+		if($this->el->attribute('tinymce')) {
+			$id =  $this->el->attribute('id');
+			
+			if(strpos($value,'<') === false) $value = "<p>$value</p>";
+			$result = $this->session->execute(array(
+				'script' => 'tinymce.getInstanceById("' . $id . '").setContent("' . addslashes($value) . '");',
+				'args' => array(),
+			));
+
+		} else {		
+			$this->el->clear();
+			$this->el->value($this->split_keys($value));
+		}
+	}
 	
 	/**
 	 * Returns the current value
