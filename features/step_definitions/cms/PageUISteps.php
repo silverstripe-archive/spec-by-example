@@ -52,4 +52,34 @@ class PageUISteps extends WebDriverSteps {
 		}
 		throw new LogicException("Couldn't find '$pageName' in the CMS tree.");
 	}
+
+	/**
+	 * When /^I open the "([^"]*)" page$/
+	 */
+	public function stepIOpenTheParameterPage() {
+		// Shortcut for navigating to the pages section and opening a page
+		// TODO Inheriting steps confuses cuke4php (complains about duplicates)
+		$cmsSteps = new CMSSteps();
+		$cmsSteps->stepIClickParameterInTheCMSMenu('Pages');
+		sleep(1);
+		$this->stepIClickParameterInTheTree('About Us');
+	}
+
+	/**
+	 * Then /^I can see the "([^"]*)" panel$/
+	 */
+	public function stepICanSeeTheParameterPanel($panel) {
+		if($panel == 'preview') {
+			$selector = '.cms-preview';
+		} else {
+			throw new LogicException("Couldn't find selector for '$panel' panel");
+		}
+
+		$el = $this->natural->wd()->element('css selector', $selector);
+		if(!$el) throw new LogicException("Couldn't find '$panel' panel element");
+
+		$this->assertTrue($el->displayed());
+	}
+
+
 }
