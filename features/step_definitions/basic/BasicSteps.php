@@ -67,4 +67,18 @@ class BasicSteps extends WebDriverSteps {
 		$this->natural->field($field)->setTo($value);
 	}
 
+	/**
+	 * When /^I click the "([^"]*)" button$/
+	 **/
+	public function stepIClickTheParameterButton($buttonName) {
+		$this->natural->button($buttonName)->click();
+	}
+
+	/**
+	 * When /^I click the "([^"]*)" link$/
+	 */
+	 public function stepIClickOnTheParameterLink($link) {
+	 	$this->natural->link($link)->click();
+	 }
+
 }

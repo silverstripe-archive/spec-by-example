@@ -32,12 +32,22 @@ class CMSSteps extends WebDriverSteps {
 		$this->assertTrue($this->natural->textIsVisible("That doesn't seem to be the right e-mail address or password"));
 	}
 
-
 	/**
 	 * When /^I click "([^"]*)" in the CMS menu$/
 	 **/
-	public function stepIClickParameterInTheCMSMenu($arg1) {
-		$this->natural->panel('#cms-menu')->link($arg1)->click();
+	public function stepIClickParameterInTheCMSMenu($menuItem) {
+		$el = $this->natural->panel('#cms-menu')->link($menuItem);
+		$el->click();
+		sleep(1);
+	}
+
+	/**
+	 * When /^I toggle "([^"]*)" in the CMS menu$/
+	 **/
+	public function stepIToggleParameterInTheCMSMenu($menuItem) {
+		$el = $this->natural->panel('#cms-menu')->link($menuItem);
+		if(!$el) throw new LogicException("Couldn't find '$menuItem' in the CMS tree.");
+		$el->wd()->element('css selector', '.toggle-children')->click();
 		sleep(1);
 	}
 
