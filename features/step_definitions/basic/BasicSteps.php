@@ -39,19 +39,41 @@ class BasicSteps extends WebDriverSteps {
 
 
 	/**
-	 * Then /^I can see the content "([^"]*)"$/
+	 * Then /^I (can|cannot) see the content "([^"]*)"$/
 	 **/
-	public function stepICanSeeTheContentParameter($text) {
-		$this->assertTrue($this->natural->textIsVisible($text));
+	public function stepICanSeeTheContentParameter($maybe, $text) {
+		$assert = ($maybe == 'can') ? 'assertTrue' : 'assertFalse';
+		$this->$assert($this->natural->textIsVisible($text));
 	}
 
+	/**
+	 * Then /^I can see the headline "([^"]*)"$/
+	 */
+	public function stepICanSeeTheHeadlineParameter($content) {
+		$matched = false;
+		foreach(range(1,6) as $level) {
+			$headers = $this->natural->wd()->elements('css selector', 'h' . $level);
+			foreach($headers as $header) {
+				if(trim($header->text()) == $content) $matched = true;
+			}			
+		}
+		
+		if(!$matched) throw new LogicException("Couldn't find '$content' in preview panel");
+	}
+
+	/**
+	 * Then /^I can see a "([^"]*)" field in the "([^"]*)" form$/
+	 **/
+	public function stepICanSeeAParameterFieldInTheParameterForm($field, $form) {
+		$this->stepICanSeeAParameterField($field, $form);
+	}
 
 	/**
 	 * Then /^I can see a "([^"]*)" field$/
 	 **/
-	public function stepICanSeeAParameterField($field) {
+	public function stepICanSeeAParameterField($field, $form = null) {
 		try {
-			$this->natural->field($field);
+			$this->natural->field($field, $form);
 			$success = true;
 		} catch(LogicException $e) {
 			$success = false;
@@ -59,12 +81,18 @@ class BasicSteps extends WebDriverSteps {
 		$this->assertTrue($success);
 	}
 
+	/**
+	 * When /^I put "([^"]*)" into the "([^"]*)" field in the "([^"]*)" form$/
+	 **/
+	public function stepIPutParameterIntoTheParameterFieldInTheParameterForm($value, $field, $form) {
+		$this->stepIPutParameterIntoTheParameterField($value, $field, $form);
+	}
 
 	/**
 	 * When /^I put "([^"]*)" into the "([^"]*)" field$/
 	 **/
-	public function stepIPutParameterIntoTheParameterField($value, $field) {
-		$this->natural->field($field)->setTo($value);
+	public function stepIPutParameterIntoTheParameterField($value, $field, $form = null) {
+		$this->natural->field($field, $form)->setTo($value);
 	}
 
 	/**

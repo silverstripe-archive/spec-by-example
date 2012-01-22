@@ -47,10 +47,11 @@ class NaturalWebDriver {
 	/**
 	 * Return a field by its label
 	 */
-	function field($label) {
+	function field($label, $form = null) {
+		$rootEl = ($form) ? $this->wd()->element('css selector', '#Form_' . $form . 'Form') : $this->el;
 		try {
 			$labelEl = null;
-			$potentialLabels = $this->el->elements("xpath", "//label[text()='$label']");
+			$potentialLabels = $rootEl->elements("xpath", "//label[text()='$label']");
 			foreach($potentialLabels as $potentialLabel) {
 				if($potentialLabel->displayed()) {
 					$labelEl = $potentialLabel;
@@ -64,7 +65,7 @@ class NaturalWebDriver {
 		
 		$id = $labelEl->attribute('for');
 		try {
-			$el = $this->el->element("id", $id);
+			$el = $rootEl->element("id", $id);
 		} catch(NoSuchElementWebDriverError $e) { $el = null; }
 		
 		if(!$el) throw new LogicException("Can't find a field for the '$label' (expected ID: $id)");
