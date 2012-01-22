@@ -43,8 +43,8 @@ class PageUISteps extends WebDriverSteps {
 	 **/
 	public function stepIClickParameterInTheTree($pageName) {
 		// Check each link in the tree, looking at it's span.item text, so as to ignore the lozenges
-		foreach($this->natural->wd()->elements('css selector', '#cms-content-treeview div.cms-tree a span.item') as $candidate) {
-			if($candidate->text() == $pageName) {
+		foreach($this->natural->wd()->elements('css selector', '#cms-content-treeview div.cms-tree a .item') as $candidate) {
+			if(trim($candidate->text()) == $pageName) {
 				$natural = new NaturalWebDriver_Element($candidate, $this->natural->wd());
 				$natural->click();
 				return;
