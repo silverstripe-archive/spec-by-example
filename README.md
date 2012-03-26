@@ -1,8 +1,10 @@
 # Specification by Example with cuke4php and php-webdriver
 
+*EXPERIMENTAL*
+
 ## Introduction
 
-The book, [Specification by Example](http://dl.dropbox.com/u/7129062/Specification_by_Example.mobi), provides more justification about _why_ we set out our test automation in this in way.  In essence, the idea is to start by writing the specification of what's required for a particular Story as a set of examples, and to codify those examples as a Cucumber feature, which can later be automated.
+The book, [Specification by Example](http://specificationbyexample.com/key_ideas.html), provides more justification about _why_ we set out our test automation in this in way.  In essence, the idea is to start by writing the specification of what's required for a particular Story as a set of examples, and to codify those examples as a Cucumber feature, which can later be automated.
 
 The readability of the Cucumber features (by the business, not just by devs) is therefore just as important as the test automation itself.
 
