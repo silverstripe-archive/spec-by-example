@@ -1,6 +1,6 @@
 # Specification by Example with cuke4php and php-webdriver
 
-*EXPERIMENTAL*
+**EXPERIMENTAL** This approach has been replaced by the [SilverStripe Behat Extension](https://github.com/silverstripe-labs/silverstripe-behat-extension/)
 
 ## Introduction
 
